@@ -1,3 +1,6 @@
+export { IngredientDetails } from './ingredient-details/ingredient-details';
+export { OrderInfo } from './order-info/order-info';
+export { Modal } from './modal/modal';
 export * from './app-header';
 export * from './burger-constructor';
 export * from './burger-constructor-element';
