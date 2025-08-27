@@ -1,4 +1,5 @@
 import { forwardRef, useMemo } from 'react';
+import { useAppSelector } from '../../services/hooks';
 import { TIngredientsCategoryProps } from './type';
 import { TIngredient } from '@utils-types';
 import { IngredientsCategoryUI } from '../ui/ingredients-category';
@@ -7,13 +8,8 @@ export const IngredientsCategory = forwardRef<
   HTMLUListElement,
   TIngredientsCategoryProps
 >(({ title, titleRef, ingredients }, ref) => {
-  /** TODO: взять переменную из стора */
-  const burgerConstructor = {
-    bun: {
-      _id: ''
-    },
-    ingredients: []
-  };
+  // Получаем данные конструктора из Redux
+  const burgerConstructor = useAppSelector((state) => state.burgerConstructor);
 
   const ingredientsCounters = useMemo(() => {
     const { bun, ingredients } = burgerConstructor;
@@ -24,7 +20,7 @@ export const IngredientsCategory = forwardRef<
     });
     if (bun) counters[bun._id] = 2;
     return counters;
-  }, [burgerConstructor]);
+  }, [burgerConstructor.bun, burgerConstructor.ingredients]);
 
   return (
     <IngredientsCategoryUI
