@@ -39,3 +39,18 @@ export type TUser = {
 };
 
 export type TTabMode = 'bun' | 'sauce' | 'main';
+
+export type TOrderInfo = {
+  _id: string;
+  status: string;
+  name: string;
+  createdAt: string;
+  updatedAt: string;
+  number: number;
+  ingredients: string[];
+  ingredientsInfo: {
+    [key: string]: TIngredient & { count: number };
+  };
+  date: Date;
+  total: number;
+};

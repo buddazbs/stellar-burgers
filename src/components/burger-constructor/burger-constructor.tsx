@@ -4,7 +4,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { BurgerConstructorUI } from '@ui';
 import { TConstructorIngredient, TOrder } from '@utils-types';
 
-import { useAppDispatch, useAppSelector } from '../../services/hooks';
+import { useAppDispatch, useAppSelector } from '../../services/store';
 
 import {
   createOrder,
@@ -18,7 +18,7 @@ import {
 } from '../../services/slices/constructorSlice';
 
 export const BurgerConstructor: FC = () => {
-  const user = useAppSelector((state: RootState) => state.auth.user);
+  const user = useAppSelector((state: RootState) => state.user.user);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const location = useLocation();

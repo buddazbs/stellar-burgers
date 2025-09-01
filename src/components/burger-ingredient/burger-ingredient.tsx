@@ -3,16 +3,22 @@ import { useLocation } from 'react-router-dom';
 
 import { BurgerIngredientUI } from '@ui';
 import { TBurgerIngredientProps } from './type';
-import { useAppDispatch } from '../../services/hooks';
+import { useAppDispatch, useAppSelector } from '../../services/store';
 import {
   setBunWithId,
   addIngredientWithId
 } from '../../services/slices/constructorSlice';
+import { useModalNavigation } from '../../hooks/useModalNavigation';
+import { selectIngredientCounts } from '../../services/constructorSelectors';
 
 export const BurgerIngredient: FC<TBurgerIngredientProps> = memo(
-  ({ ingredient, count }) => {
+  ({ ingredient }) => {
     const dispatch = useAppDispatch();
     const location = useLocation();
+    const { navigateToIngredient } = useModalNavigation();
+
+    const counts = useAppSelector(selectIngredientCounts);
+    const effectiveCount = counts[ingredient._id] ?? 0;
 
     const handleAdd = () => {
       if (ingredient.type === 'bun') {
@@ -22,13 +28,19 @@ export const BurgerIngredient: FC<TBurgerIngredientProps> = memo(
       }
     };
 
+    const handleClick = () => {
+      navigateToIngredient(ingredient);
+    };
+
     return (
-      <BurgerIngredientUI
-        ingredient={ingredient}
-        count={count}
-        handleAdd={handleAdd}
-        locationState={{ background: location }}
-      />
+      <div onClick={handleClick}>
+        <BurgerIngredientUI
+          ingredient={ingredient}
+          count={effectiveCount}
+          handleAdd={handleAdd}
+          locationState={{ background: location }}
+        />
+      </div>
     );
   }
 );

@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import { getUserApi, updateUserApi } from '@api';
+import { getUserApi, updateUserApi, logoutApi } from '@api';
 import { TUser } from '@utils-types';
 
 export type UserState = {
@@ -42,6 +42,18 @@ export const updateUser = createAsyncThunk(
       return rejectWithValue(
         error?.message || 'Ошибка обновления пользователя'
       );
+    }
+  }
+);
+
+export const logout = createAsyncThunk(
+  'user/logout',
+  async (_, { rejectWithValue }) => {
+    try {
+      await logoutApi();
+      return null;
+    } catch (error: any) {
+      return rejectWithValue(error?.message || 'Ошибка выхода');
     }
   }
 );
@@ -92,6 +104,12 @@ const userSlice = createSlice({
         state.error =
           (action.payload as string) || 'Ошибка обновления пользователя';
         state.isLoading = false;
+      })
+      .addCase(logout.fulfilled, (state) => {
+        state.user = null;
+        state.form = null;
+        state.isEdited = false;
+        state.error = null;
       });
   }
 });

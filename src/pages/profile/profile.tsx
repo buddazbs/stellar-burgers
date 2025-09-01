@@ -1,6 +1,6 @@
 import { ProfileUI } from '@ui-pages';
 import { FC, SyntheticEvent, useEffect } from 'react';
-import { useAppSelector, useAppDispatch } from '../../services/hooks';
+import { useAppSelector, useAppDispatch } from '../../services/store';
 import { RootState } from '../../services/store';
 import {
   fetchUser,
@@ -11,7 +11,7 @@ import {
 
 export const Profile: FC = () => {
   const dispatch = useAppDispatch();
-  const { user, error } = useAppSelector((state: RootState) => state.auth);
+  const { user, error } = useAppSelector((state: RootState) => state.user);
   const { form, isEdited, isLoading } = useAppSelector(
     (state: RootState) => state.user
   );

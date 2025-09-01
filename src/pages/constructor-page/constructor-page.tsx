@@ -1,4 +1,4 @@
-import { useAppSelector, useAppDispatch } from '../../services/hooks';
+import { useAppSelector, useAppDispatch } from '../../services/store';
 import { useEffect } from 'react';
 import styles from './constructor-page.module.css';
 import { BurgerIngredients } from '../../components';

@@ -2,24 +2,26 @@ import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import {
   loginUserApi,
   registerUserApi,
-  logoutApi,
   forgotPasswordApi,
   resetPasswordApi
 } from '@api';
 import { TUser } from '@utils-types';
+import { setCookie } from '../../utils/cookie';
 
 export interface AuthState {
   user: TUser | null;
   loading: boolean;
   error: string | null;
   isAuth: boolean;
+  forgotPasswordSuccess: boolean;
 }
 
 const initialState: AuthState = {
   user: null,
   loading: false,
   error: null,
-  isAuth: false
+  isAuth: false,
+  forgotPasswordSuccess: false
 };
 
 export const login = createAsyncThunk<
@@ -29,6 +31,8 @@ export const login = createAsyncThunk<
 >('auth/login', async (data, { rejectWithValue }) => {
   try {
     const res = await loginUserApi(data);
+    localStorage.setItem('refreshToken', res.refreshToken);
+    setCookie('accessToken', res.accessToken);
     return res.user;
   } catch (err: any) {
     return rejectWithValue(err.message || 'Ошибка авторизации');
@@ -47,17 +51,6 @@ export const register = createAsyncThunk<
     return rejectWithValue(err.message || 'Ошибка регистрации');
   }
 });
-
-export const logout = createAsyncThunk<void, void, { rejectValue: string }>(
-  'auth/logout',
-  async (_, { rejectWithValue }) => {
-    try {
-      await logoutApi();
-    } catch (err: any) {
-      return rejectWithValue(err.message || 'Ошибка выхода');
-    }
-  }
-);
 
 export const forgotPassword = createAsyncThunk<
   void,
@@ -86,70 +79,56 @@ export const resetPassword = createAsyncThunk<
 const authSlice = createSlice({
   name: 'auth',
   initialState,
-  reducers: {},
+  reducers: {
+    resetForgotPasswordSuccess(state) {
+      state.forgotPasswordSuccess = false;
+    }
+  },
   extraReducers: (builder) => {
     builder
-      .addCase(login.pending, (state: AuthState) => {
+      .addCase(login.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(
-        login.fulfilled,
-        (state: AuthState, action: PayloadAction<TUser>) => {
-          state.user = action.payload;
-          state.isAuth = true;
-          state.loading = false;
-        }
-      )
+      .addCase(login.fulfilled, (state, action: PayloadAction<TUser>) => {
+        state.user = action.payload;
+        state.isAuth = true;
+        state.loading = false;
+      })
       .addCase(login.rejected, (state, action) => {
         state.loading = false;
         state.error = (action.payload as string) || 'Ошибка авторизации';
       })
-      .addCase(register.pending, (state: AuthState) => {
+      .addCase(register.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(
-        register.fulfilled,
-        (state: AuthState, action: PayloadAction<TUser>) => {
-          state.user = action.payload;
-          state.isAuth = true;
-          state.loading = false;
-        }
-      )
+      .addCase(register.fulfilled, (state, action: PayloadAction<TUser>) => {
+        state.user = action.payload;
+        state.isAuth = true;
+        state.loading = false;
+      })
       .addCase(register.rejected, (state, action) => {
         state.loading = false;
         state.error = (action.payload as string) || 'Ошибка регистрации';
       })
-      .addCase(logout.fulfilled, (state) => {
-        state.user = null;
-        state.isAuth = false;
-        state.loading = false;
-      })
-      .addCase(forgotPassword.pending, (state: AuthState) => {
+      .addCase(forgotPassword.pending, (state) => {
         state.loading = true;
         state.error = null;
+        state.forgotPasswordSuccess = false;
       })
-      .addCase(forgotPassword.fulfilled, (state: AuthState) => {
+      .addCase(forgotPassword.fulfilled, (state) => {
         state.loading = false;
+        state.forgotPasswordSuccess = true;
       })
       .addCase(forgotPassword.rejected, (state, action) => {
         state.loading = false;
         state.error =
           (action.payload as string) || 'Ошибка восстановления пароля';
-      })
-      .addCase(resetPassword.pending, (state: AuthState) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(resetPassword.fulfilled, (state: AuthState) => {
-        state.loading = false;
-      })
-      .addCase(resetPassword.rejected, (state, action) => {
-        state.loading = false;
-        state.error = (action.payload as string) || 'Ошибка сброса пароля';
+        state.forgotPasswordSuccess = false;
       });
   }
 });
 
+export const { resetForgotPasswordSuccess } = authSlice.actions;
 export default authSlice.reducer;

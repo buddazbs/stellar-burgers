@@ -1,11 +1,9 @@
 import { FC, useMemo } from 'react';
 import { IngredientDetailsUI } from '../ui/ingredient-details';
 import { useParams, useLocation } from 'react-router-dom';
-import { useAppSelector } from '../../services/hooks';
+import { useAppSelector } from '../../services/store';
 import type { RootState } from '../../services/store';
 import { NotFound404 } from '@pages';
-import { IngredientDetails as IngredientDetailsComponent } from '@components';
-import type { TIngredient } from '../../utils/types';
 import styles from '../app/app.module.css';
 
 export const IngredientDetails: FC = () => {

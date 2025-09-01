@@ -26,6 +26,18 @@ const constructorSlice = createSlice({
         (i) => i.id !== action.payload
       );
     },
+    moveIngredient(
+      state,
+      action: PayloadAction<{ dragIndex: number; hoverIndex: number }>
+    ) {
+      const { dragIndex, hoverIndex } = action.payload;
+      if (dragIndex !== hoverIndex) {
+        const newArr = [...state.ingredients];
+        const [removed] = newArr.splice(dragIndex, 1);
+        newArr.splice(hoverIndex, 0, removed);
+        state.ingredients = newArr;
+      }
+    },
     moveIngredientUp(state, action: PayloadAction<number>) {
       const index = action.payload;
       if (index > 0 && index < state.ingredients.length) {
@@ -59,6 +71,7 @@ export const {
   setBun,
   addIngredient,
   removeIngredient,
+  moveIngredient,
   moveIngredientUp,
   moveIngredientDown,
   resetConstructor

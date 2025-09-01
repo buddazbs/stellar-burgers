@@ -2,20 +2,16 @@ import { FC, useMemo } from 'react';
 import { Preloader } from '../ui/preloader';
 import { OrderInfoUI } from '../ui/order-info';
 import { TIngredient } from '@utils-types';
+import { useAppSelector } from '../../services/store';
+import type { RootState } from '../../services/store';
 
 export const OrderInfo: FC = () => {
-  /** TODO: взять переменные orderData и ingredients из стора */
-  const orderData = {
-    createdAt: '',
-    ingredients: [],
-    _id: '',
-    status: '',
-    name: '',
-    updatedAt: 'string',
-    number: 0
-  };
-
-  const ingredients: TIngredient[] = [];
+  const orderData = useAppSelector(
+    (state: RootState) => state.orderDetails.currentOrder
+  );
+  const ingredients: TIngredient[] = useAppSelector(
+    (state: RootState) => state.ingredients.items
+  );
 
   /* Готовим данные для отображения */
   const orderInfo = useMemo(() => {

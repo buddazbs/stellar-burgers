@@ -45,20 +45,20 @@ export const BurgerIngredientsUI: FC<BurgerIngredientsUIProps> = memo(
         <div className={styles.content}>
           <IngredientsCategory
             title='Булки'
-            titleRef={titleBunRef}
             ingredients={buns}
+            type='bun'
             ref={bunsRef}
           />
           <IngredientsCategory
             title='Начинки'
-            titleRef={titleMainRef}
             ingredients={mains}
+            type='main'
             ref={mainsRef}
           />
           <IngredientsCategory
             title='Соусы'
-            titleRef={titleSaucesRef}
             ingredients={sauces}
+            type='sauce'
             ref={saucesRef}
           />
         </div>

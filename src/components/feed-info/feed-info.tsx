@@ -1,30 +1,26 @@
 import { FC } from 'react';
-import { useAppSelector } from '../../services/hooks';
-
-import { TOrder } from '@utils-types';
-import { FeedInfoUI } from '../ui/feed-info';
-
-const getOrders = (orders: TOrder[], status: string): number[] =>
-  orders
-    .filter((item) => item.status === status)
-    .map((item) => item.number)
-    .slice(0, 20);
+import { useAppSelector } from '../../services/store';
+import { FeedInfoUI } from '@ui';
+import type { RootState } from '../../services/store';
 
 export const FeedInfo: FC = () => {
-  const orders: TOrder[] = useAppSelector((state) => state.feeds.orders);
-  const feed = {
-    total: useAppSelector((state) => state.feeds.total),
-    totalToday: useAppSelector((state) => state.feeds.totalToday)
-  };
+  const { total, totalToday, orders } = useAppSelector(
+    (state: RootState) => state.feeds
+  );
 
-  const readyOrders = getOrders(orders, 'done');
-  const pendingOrders = getOrders(orders, 'pending');
+  const readyOrders = orders
+    .filter((order) => order.status === 'done')
+    .map((order) => order.number);
+
+  const pendingOrders = orders
+    .filter((order) => order.status === 'pending')
+    .map((order) => order.number);
 
   return (
     <FeedInfoUI
+      feed={{ total, totalToday }}
       readyOrders={readyOrders}
       pendingOrders={pendingOrders}
-      feed={feed}
     />
   );
 };

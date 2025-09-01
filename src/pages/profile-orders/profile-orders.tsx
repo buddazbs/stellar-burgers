@@ -1,27 +1,23 @@
-import { useAppSelector, useAppDispatch } from '../../services/hooks';
-import { fetchOrders } from '../../services/slices/ordersSlice';
+import { useAppSelector, useAppDispatch } from '../../services/store';
+import { fetchProfileOrders } from '../../services/slices/profileOrdersSlice';
 import type { RootState } from '../../services/store';
 
 import { ProfileOrdersUI } from '@ui-pages';
 import { FC, useEffect } from 'react';
 
 export const ProfileOrders: FC = () => {
-  const orders = useAppSelector((state: RootState) => state.orders.orders);
+  const orders = useAppSelector(
+    (state: RootState) => state.profileOrders.orders
+  );
   const isLoading = useAppSelector(
-    (state: RootState) => state.orders.isLoading
+    (state: RootState) => state.profileOrders.isLoading
   );
   const dispatch = useAppDispatch();
-  const orderModalData = useAppSelector(
-    (state: RootState) => state.orders.orderModalData
-  );
-  const orderRequest = useAppSelector(
-    (state: RootState) => state.orders.orderRequest
-  );
-  const error = useAppSelector((state: RootState) => state.orders.error);
+  const error = useAppSelector((state: RootState) => state.profileOrders.error);
 
   useEffect(() => {
     if (!orders.length) {
-      dispatch(fetchOrders());
+      dispatch(fetchProfileOrders());
     }
   }, [dispatch, orders.length]);
 
