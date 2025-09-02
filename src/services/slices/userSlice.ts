@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import { getUserApi, updateUserApi, logoutApi } from '@api';
 import { TUser } from '@utils-types';
+import { deleteCookie } from '../../utils/cookie';
 
 export type UserState = {
   user: TUser | null;
@@ -51,6 +52,8 @@ export const logout = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       await logoutApi();
+      localStorage.removeItem('refreshToken');
+      deleteCookie('accessToken');
       return null;
     } catch (error: any) {
       return rejectWithValue(error?.message || 'Ошибка выхода');

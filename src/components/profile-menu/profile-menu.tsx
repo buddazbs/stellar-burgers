@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { ProfileMenuUI } from '@ui';
 import { useAppDispatch } from '../../services/store';
 import { logout } from '../../services/slices/userSlice';
+import { logout as authLogout } from '../../services/slices/authSlice';
 
 export const ProfileMenu: FC = () => {
   const { pathname } = useLocation();
@@ -11,6 +12,7 @@ export const ProfileMenu: FC = () => {
 
   const handleLogout = () => {
     dispatch(logout());
+    dispatch(authLogout());
     navigate('/');
   };
 

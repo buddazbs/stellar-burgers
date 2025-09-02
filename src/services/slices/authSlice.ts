@@ -6,7 +6,7 @@ import {
   resetPasswordApi
 } from '@api';
 import { TUser } from '@utils-types';
-import { setCookie } from '../../utils/cookie';
+import { setCookie, deleteCookie } from '../../utils/cookie';
 
 export interface AuthState {
   user: TUser | null;
@@ -82,6 +82,14 @@ const authSlice = createSlice({
   reducers: {
     resetForgotPasswordSuccess(state) {
       state.forgotPasswordSuccess = false;
+    },
+    logout(state) {
+      state.user = null;
+      state.isAuth = false;
+      state.loading = false;
+      state.error = null;
+      localStorage.removeItem('refreshToken');
+      deleteCookie('accessToken');
     }
   },
   extraReducers: (builder) => {
@@ -130,5 +138,5 @@ const authSlice = createSlice({
   }
 });
 
-export const { resetForgotPasswordSuccess } = authSlice.actions;
+export const { resetForgotPasswordSuccess, logout } = authSlice.actions;
 export default authSlice.reducer;
