@@ -24,7 +24,6 @@ export const OrderModal: FC = () => {
   );
   const { handleModalClose } = useModalNavigation();
 
-  // Используем только Redux isOpen для модалки
   const shouldShowModal = isOpen;
 
   useEffect(() => {

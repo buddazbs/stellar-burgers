@@ -18,7 +18,6 @@ export const useModalNavigation = () => {
 
   const navigateToIngredient = useCallback(
     (ingredient: TIngredient) => {
-      // Всегда открываем модальное окно поверх текущей страницы
       dispatch(openIngredientModal(ingredient));
       navigate(`/ingredients/${ingredient._id}`, {
         state: { background: location }
@@ -29,7 +28,6 @@ export const useModalNavigation = () => {
 
   const navigateToOrder = useCallback(
     (order: TOrder, basePath: string) => {
-      // Всегда открываем модальное окно поверх текущей страницы
       dispatch(openOrderModal(order));
       navigate(`${basePath}/${order.number}`, {
         state: { background: location }
@@ -39,7 +37,6 @@ export const useModalNavigation = () => {
   );
 
   const handleModalClose = useCallback(() => {
-    // Если есть background state, возвращаемся назад
     if (location.state?.background) {
       navigate(-1);
     }

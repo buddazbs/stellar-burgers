@@ -24,7 +24,6 @@ export const IngredientModal: FC = () => {
     [ingredients, id]
   );
 
-  // Показываем модальное окно если есть background state или оно открыто через Redux
   const shouldShowModal = location.state?.background || isOpen;
 
   const handleClose = () => {

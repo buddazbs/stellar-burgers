@@ -70,24 +70,18 @@ export const OrderDetails: FC = () => {
     };
   }, [orderData, ingredients]);
 
-  // Если есть background state, значит мы пришли с другой страницы
-  // и нужно показать модальное окно
   if (location.state?.background) {
     return <OrderModal />;
   }
 
-  // Иначе показываем обычную страницу
-  // Показываем загрузку пока данные загружаются
   if (isLoading) {
     return <Preloader />;
   }
 
-  // Показываем ошибку если заказ не найден
   if (error || !orderData) {
     return <NotFound404 />;
   }
 
-  // Показываем загрузку пока ингредиенты не загружены
   if (!orderInfo) {
     return <Preloader />;
   }
