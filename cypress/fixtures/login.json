@@ -1,0 +1,9 @@
+{
+  "success": true,
+  "refreshToken": "refreshTokenMock",
+  "accessToken": "accessTokenMock",
+  "user": {
+    "email": "buddhaTest@yandex.ru",
+    "name": "BuddhaZBS"
+  }
+}

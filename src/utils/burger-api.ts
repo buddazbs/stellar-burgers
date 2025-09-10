@@ -1,7 +1,10 @@
 import { setCookie, getCookie } from './cookie';
 import { TIngredient, TOrder, TOrdersData, TUser } from './types';
 
-const URL = process.env.BURGER_API_URL;
+// Use '/api' as a sensible default if BURGER_API_URL is not provided
+// This ensures requests are made to a valid relative path during Cypress tests
+// and local development, so intercepts like '**/auth/user' will match.
+const URL = process.env.BURGER_API_URL || '/api';
 
 const checkResponse = <T>(res: Response): Promise<T> =>
   res.ok ? res.json() : res.json().then((err) => Promise.reject(err));
